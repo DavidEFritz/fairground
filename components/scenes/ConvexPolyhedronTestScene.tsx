@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as THREE from "three";
 import { Stats } from '@react-three/drei'
 import React, { Suspense, useMemo } from "react";
