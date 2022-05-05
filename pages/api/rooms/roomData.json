@@ -8,5 +8,10 @@
     "title": "✅ Cube Test",
     "description": "Test how Blender interacts with Three.js",
     "link": "/cube-test"
+  },
+  {
+    "title": "✅ Can Toss",
+    "description": "Basic game test",
+    "link": "/game-test"
   }
 ]
