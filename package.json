@@ -8,7 +8,7 @@
     "start": "next start -p $PORT"
   },
   "dependencies": {
-    "@react-three/cannon": "^4.0.1",
+    "@react-three/cannon": "^4.1.0",
     "@react-three/drei": "^7.13.1",
     "@react-three/fiber": "^7.0.15",
     "@types/jest": "^27.0.2",

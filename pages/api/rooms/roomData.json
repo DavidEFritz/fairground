@@ -3,5 +3,10 @@
     "title": "✅ Convex Polyhedron Performance Test",
     "description": "Test to measure the FPS performance of convex polyhedron.",
     "link": "/convex-polyhedron-test"
+  },
+  {
+    "title": "✅ Cube Test",
+    "description": "Test how Blender interacts with Three.js",
+    "link": "/cube-test"
   }
 ]
