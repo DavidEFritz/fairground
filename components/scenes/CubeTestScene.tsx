@@ -5,278 +5,92 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Sky, Loader, useGLTF, OrbitControls } from '@react-three/drei'
 import { Physics, usePlane, Debug, useBox, useCylinder, useConvexPolyhedron, useSphere } from '@react-three/cannon'
 import * as THREE from 'three'
-import { Geometry } from "three-stdlib";
-
-
-  function Cube(props) {
-    const { nodes } = useGLTF(props.url)
-
-    const object = nodes.Scene.children.map((i) => {
-      if (i.geometry == null) {
-        return null
-      } else {
-
-        const boundingBox = i.geometry.boundingBox
-        const x = boundingBox.max.x - boundingBox.min.x
-        const y = boundingBox.max.y - boundingBox.min.y
-        const z = boundingBox.max.z - boundingBox.min.z
-
-        let positionX = 0
-        let positionY = 0
-        let positionZ = 0
-
-        if (props.position == undefined) {
-          positionX = i.position.x
-          positionY = i.position.y
-          positionZ = i.position.z
-        } else {
-          positionX = props.position[0]
-          positionY = props.position[1]
-          positionZ = props.position[2]
-        }
-
-        let rotationX = 0
-        let rotationY = 0
-        let rotationZ = 0
-
-        if (props.rotation == undefined) {
-          rotationX = i.rotation.x
-          rotationY = i.rotation.y
-          rotationZ = i.rotation.z
-        } else {
-          rotationX = props.rotation[0]
-          rotationY = props.rotation[1]
-          rotationZ = props.rotation[2]
-        }
-
-        const [ref] = useBox(() => ({
-
-          position: [positionX, positionY, positionZ],
-          rotation: [rotationX, rotationY, rotationZ],
-          mass: props.mass,
-          args: [x, y, z],
-          allowSleep: true,
-          sleepSpeedLimit: 0.1,
-          sleepTimeLimit: 1,
-          material: {
-            friction: 1,
-            restitution: 0,
-          }
-        }))
-
-        return (
-          <mesh
-            key={(i.name)}
-            castShadow
-            receiveShadow
-            geometry={i.geometry}
-            position={positionX, positionY, positionZ}
-            rotation={[rotationX, rotationY, rotationZ]}
-            material={i.material}
-            ref={ref}
-          >
-          </mesh>
-        )
-      }
-    })
-
-    return <Suspense fallback={null}>{object}</Suspense>
-  }
+import { Geometry, XRHandModel } from "three-stdlib";
+// import Cylinder from '../objects/simpleCollisionMesh/Cylinder'
+import Cylinder from '../objects/collisionMeshCalculator/CylinderCalculator'
+import CylinderBoundingBox from '../objects/simpleCollisionMesh/CylinderBoundingBox'
+import Sphere from '../objects/simpleCollisionMesh/Sphere'
+import Cube from '../objects/simpleCollisionMesh/Cube'
 
 function Ground() {
     const [ref] = usePlane(() => ({ rotation: [-Math.PI / 2, 0, 0] }))
   
     return (
-      <mesh ref={ref}>
-        <planeBufferGeometry args={[100, 100, 100, 100]} />
-        <meshBasicMaterial color='grey' />
+      <mesh 
+        ref={ref}
+        receiveShadow
+      >
+        <planeGeometry args={[100, 100, 100, 100]} />
+        <meshStandardMaterial color='grey' />
       </mesh>
     )
   }
 
-  function Cylinder(props) {
-    const nodes = useGLTF(props.url)
-    const object = nodes.scene.children.map((i) => {
-      if (i.geometry == null) {
-        return null
-      } else {
+  function MeshCalculatorTest() {
+    const propsToPass = {
+      url: '/cylinderShaped.glb'
+    }
 
-        const boundingBox = i.geometry.boundingBox
-        const r = (boundingBox.max.x - boundingBox.min.x) / 2
-        const h = boundingBox.max.y - boundingBox.min.y
+    const collisionMesh = Cylinder(propsToPass)
+    console.log(collisionMesh)
 
-        let positionX = 0
-        let positionY = 0
-        let positionZ = 0
-
-        if (props.position == undefined) {
-          positionX = i.position.x
-          positionY = i.position.y
-          positionZ = i.position.z
-        } else {
-          positionX = props.position[0]
-          positionY = props.position[1]
-          positionZ = props.position[2]
-        }
-
-        let rotationX = 0
-        let rotationY = 0
-        let rotationZ = 0
-
-        if (props.rotation == undefined) {
-          rotationX = i.rotation.x
-          rotationY = i.rotation.y
-          rotationZ = i.rotation.z
-        } else {
-          rotationX = props.rotation[0]
-          rotationY = props.rotation[1]
-          rotationZ = props.rotation[2]
-        }
-
-        let segments = 8
-
-        if (props.segments == undefined) {
-          segments = 8
-        } else {
-          segments = props.segments
-        }
-
-        const [ref] = useCylinder(() => ({
-          position: [positionX, positionY, positionZ],
-          rotation: [rotationX, rotationY, rotationZ],
-          mass: props.mass,
-          args: [r, r, h, segments],
-          allowSleep: true,
-          sleepSpeedLimit: 0.5,
-          sleepTimeLimit: 1,
-          material: {
-            friction: 1,
-            restitution: 0,
-          }
-        }))
-
-        return (
-          <mesh
-            key={(i.name)}
-            castShadow
-            receiveShadow
-            geometry={i.geometry}
-            rotation={[rotationX, rotationY, rotationZ]}
-            material={i.material}
-            ref={ref}
-          >
-          </mesh>
-        )
+    const [ref] = useCylinder(() => ({
+      position: [collisionMesh[1].position[0], collisionMesh[1].position[1], collisionMesh[1].position[2]],
+      rotation: [collisionMesh[1].rotation[0], collisionMesh[1].rotation[1], collisionMesh[1].rotation[2]],
+      mass: 0.1,
+      args: [collisionMesh[1].radiusTop, collisionMesh[1].radiusBottom, collisionMesh[1].height, collisionMesh[1].segments],
+      allowSleep: true,
+      sleepSpeedLimit: 1,
+      sleepTimeLimit: 1,
+      material: {
+      friction: 1,
+      restitution: 0,
       }
-    })
+  }))
 
-    return <Suspense fallback={null}>{object}</Suspense>
+    return(
+      <mesh
+        key={collisionMesh[1].model.name}
+        castShadow
+        receiveShadow
+        geometry={collisionMesh[1].model.geometry}
+        rotation={[collisionMesh[1].rotation.x, collisionMesh[1].rotation.y, collisionMesh[1].rotation.z]}
+        material={collisionMesh[1].model.material}
+        ref={ref}
+      >
+      </mesh>    )
   }
 
-  function Sphere(props) {
-    const nodes = useGLTF(props.url)
-    const object = nodes.scene.children.map((i) => {
-      if (i.geometry == null) {
-        return null
-      } else {
-
-        const boundingBox = i.geometry.boundingBox
-        const r = (boundingBox.max.x - boundingBox.min.x) / 2
-
-        let positionX = 0
-        let positionY = 0
-        let positionZ = 0
-
-        if (props.position == undefined) {
-          positionX = i.position.x
-          positionY = i.position.y
-          positionZ = i.position.z
-        } else {
-          positionX = props.position[0]
-          positionY = props.position[1]
-          positionZ = props.position[2]
-        }
-
-        let rotationX = 0
-        let rotationY = 0
-        let rotationZ = 0
-
-        if (props.rotation == undefined) {
-          rotationX = i.rotation.x
-          rotationY = i.rotation.y
-          rotationZ = i.rotation.z
-        } else {
-          rotationX = props.rotation[0]
-          rotationY = props.rotation[1]
-          rotationZ = props.rotation[2]
-        }
-
-        const [ref] = useSphere(() => ({
-          position: [positionX, positionY, positionZ],
-          rotation: [rotationX, rotationY, rotationZ],
-          mass: props.mass,
-          args: [r],
-          allowSleep: true,
-          sleepSpeedLimit: 1,
-          sleepTimeLimit: 1,
-          material: {
-            friction: 1,
-            restitution: 0,
-          }
-        }))
-
-        return (
-          <mesh
-            key={(i.name)}
-            castShadow
-            receiveShadow
-            geometry={i.geometry}
-            rotation={[rotationX, rotationY, rotationZ]}
-            material={i.material}
-            ref={ref}
-          >
-          </mesh>
-        )
-      }
+  function StressTest() {
+    const objectNumber = 20
+    const objectsArray = []
+    for (let i = 0; i < objectNumber; i++) {
+      objectsArray.push({position: [Math.random() * 20 - 10, Math.random() * 20 + 5, Math.random() * 20 - 10], rotation: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI], url: '/cylinderShaped.fbx'})
+    }
+    const objects = objectsArray.map((object, index) => {
+      return(
+      <Cylinder key={index} mass={0.1} position={object.position} rotation={object.rotation} url={object.url} />
+      )
     })
-
-    return <Suspense fallback={null}>{object}</Suspense>
+    return(objects)
   }
 
   export default function CubeTest() {
     return (
       <>
-      <Canvas camera={{ position: [0, 5, 15] }} className='bg-black'>
+      <Canvas shadows={true} camera={{ position: [0, 20, 50] }} className='bg-black'>
         <OrbitControls />
         <Sky sunPosition={[100, 10, 100]} />
         <ambientLight intensity={0.3} />
-        <pointLight castShadow intensity={1} position={[10, 10, 0]} />
+        <pointLight shadow-mapSize-height={1028} shadow-mapSize-width={1028} castShadow intensity={1} position={[10, 10, 0]} />
   
         <primitive object={new THREE.AxesHelper(10)} />
         <Suspense fallback={null}>
             <Physics allowSleep={true}>
                 <Ground />
                 <Debug color="black" >
-                    <Cube rotation={[0, 0.5, 0.5]} position={[0, 10, 0]} mass={0.1} url='/cube.glb' />
-                    <Cube rotation={[0.5, 0.5, 0.5]} position={[2, 10, 0]} mass={0.1} url='/cube.glb' />
-                    <Cube rotation={[1, 0.5, 0.5]} position={[-2, 10, 0]} mass={0.1} url='/cube.glb' />
-                    <Cube rotation={[1.5, 0.5, 0.5]} position={[2, 10, 2]} mass={0.1} url='/cube.glb' />
-                    <Cube rotation={[-0.5, 0.5, 0.5]} position={[-2, 10, -2]} mass={0.1} url='/cube.glb' />
-                    <Cube rotation={[-1, 0.5, 0.5]} position={[2, 10, -2]} mass={0.1} url='/cube.glb' />
-                    <Cylinder rotation={[0, 0.5, 0.5]} position={[0, 6, 0]} mass={0.1} segments={30} url='/cylinder.glb' />
-                    <Cylinder rotation={[0, 0, 1]} position={[2, 6, 0]} mass={0.1} segments={30} url='/cylinder.glb' />
-                    <Cylinder rotation={[0.5, -0.5, 1]} position={[-2, 6, 0]} mass={0.1} segments={30} url='/cylinder.glb' />
-                    <Cylinder rotation={[-1, 0, 1]} position={[2, 6, 2]} mass={0.1} segments={30} url='/cylinder.glb' />
-                    <Cylinder rotation={[0, -0.5, 1]} position={[-2, 6, -2]} mass={0.1} segments={30} url='/cylinder.glb' />
-                    <Cylinder rotation={[0.5, 0, -1]} position={[2, 6, -2]} mass={0.1} segments={30} url='/cylinder.glb' />
-                    <Sphere rotation={[0, 0, 1]} position={[0, 14, 0]} mass={0.1} url='/sphere.glb' />
-                    <Sphere rotation={[0, 0, 1]} position={[2, 14, 0]} mass={0.1} url='/sphere.glb' />
-                    <Sphere rotation={[0, 0, 1]} position={[-2, 14, 0]} mass={0.1} url='/sphere.glb' />
-                    <Sphere rotation={[0, 0, 1]} position={[2, 14, 2]} mass={0.1} url='/sphere.glb' />
-                    <Sphere rotation={[0, 0, 1]} position={[-2, 14, -2]} mass={0.1} url='/sphere.glb' />
-                    <Sphere rotation={[0, 0, 1]} position={[2, 14, -2]} mass={0.1} url='/sphere.glb' />
-                    {/* <Cube url='/table.glb' />
-                    <Cylinder mass={0.1} segments={30} url={'/cans.glb'} /> */}
+                  {/* <StressTest /> */}
+                  <MeshCalculatorTest />
                 </Debug>
             </Physics>
         </Suspense>

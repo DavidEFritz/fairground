@@ -11,7 +11,7 @@ export default function FpvExample() {
 return (
     <>
     <h1 className='absolute top-0 right-0 z-10 pr-2'>
-        Cube test
+        Cylinder test
     </h1>
     <div className='h-screen'>
         <CubeTestScene />
