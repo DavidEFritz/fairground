@@ -2,15 +2,17 @@
 import { Stats, useFBX } from '@react-three/drei'
 import React, { Suspense, useMemo, useLayoutEffect } from "react";
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Sky, Loader, useGLTF, OrbitControls } from '@react-three/drei'
-import { Physics, usePlane, Debug, useBox, useCylinder, useConvexPolyhedron, useSphere } from '@react-three/cannon'
+import { Sky, Loader, useGLTF, OrbitControls, PointerLockControls } from '@react-three/drei'
+import { Physics, usePlane, useCompoundBody, Debug, useBox, useCylinder, useConvexPolyhedron, useSphere } from '@react-three/cannon'
 import * as THREE from 'three'
 import { Geometry, XRHandModel } from "three-stdlib";
 // import Cylinder from '../objects/simpleCollisionMesh/Cylinder'
-import Cylinder from '../objects/collisionMeshCalculator/CylinderCalculator'
+import Cylinder from '../objects/simpleCollisionMesh/Cylinder'
 import CylinderBoundingBox from '../objects/simpleCollisionMesh/CylinderBoundingBox'
 import Sphere from '../objects/simpleCollisionMesh/Sphere'
 import Cube from '../objects/simpleCollisionMesh/Cube'
+import Compound from '../objects/compoundCollisionMesh/Compound'
+import {Player} from '../objects/game/Player'
 
 function Ground() {
     const [ref] = usePlane(() => ({ rotation: [-Math.PI / 2, 0, 0] }))
@@ -26,39 +28,106 @@ function Ground() {
     )
   }
 
-  function MeshCalculatorTest() {
-    const propsToPass = {
-      url: '/cylinderShaped.glb'
-    }
+  function Box() {
+    let data = Cube('/cube.glb')
+    console.log(data)
 
-    const collisionMesh = Cylinder(propsToPass)
-    console.log(collisionMesh)
 
-    const [ref] = useCylinder(() => ({
-      position: [collisionMesh[1].position[0], collisionMesh[1].position[1], collisionMesh[1].position[2]],
-      rotation: [collisionMesh[1].rotation[0], collisionMesh[1].rotation[1], collisionMesh[1].rotation[2]],
-      mass: 0.1,
-      args: [collisionMesh[1].radiusTop, collisionMesh[1].radiusBottom, collisionMesh[1].height, collisionMesh[1].segments],
+
+    const [ref] = useBox(() => ({
+      args: data.collisionMeshes[0].args,
+      mass: 0.2,
       allowSleep: true,
-      sleepSpeedLimit: 1,
+      sleepSpeedLimit: 0.1,
       sleepTimeLimit: 1,
       material: {
-      friction: 1,
-      restitution: 0,
-      }
-  }))
+          friction: 1,
+          restitution: 0,
+      },
+      position: [data.mesh[0].position.x, data.mesh[0].position.y, data.mesh[0].position.z]
+    }))
 
-    return(
-      <mesh
-        key={collisionMesh[1].model.name}
-        castShadow
-        receiveShadow
-        geometry={collisionMesh[1].model.geometry}
-        rotation={[collisionMesh[1].rotation.x, collisionMesh[1].rotation.y, collisionMesh[1].rotation.z]}
-        material={collisionMesh[1].model.material}
-        ref={ref}
-      >
-      </mesh>    )
+    return (
+        <mesh
+          ref={ref}
+          key={(data.mesh[0].name)}
+          castShadow
+          receiveShadow
+          geometry={data.mesh[0].geometry}
+          material={data.mesh[0].material}
+          position={[data.mesh[0].position.x, data.mesh[0].position.y, data.mesh[0].position.z]}
+        >
+
+        </mesh>
+    )
+  }
+
+  function Ball() {
+    let data = Sphere('/sphere.glb')
+    console.log(data)
+
+
+
+    const [ref] = useSphere(() => ({
+      args: data.collisionMeshes[0].args,
+      mass: 0.2,
+      allowSleep: true,
+      sleepSpeedLimit: 0.1,
+      sleepTimeLimit: 1,
+      material: {
+          friction: 1,
+          restitution: 0,
+      },
+      position: [0, 4, 0]
+    }))
+
+    return (
+        <mesh
+          ref={ref}
+          key={(data.mesh[0].name)}
+          castShadow
+          receiveShadow
+          geometry={data.mesh[0].geometry}
+          material={data.mesh[0].material}
+          position={[data.mesh[0].position.x, data.mesh[0].position.y, data.mesh[0].position.z]}
+        >
+
+        </mesh>
+    )
+  }
+
+  function CylinderShaped() {
+    let data = Cylinder('/cylinderShaped.glb')
+    console.log(data)
+
+
+
+    const [ref] = useCylinder(() => ({
+      args: data.collisionMeshes[0].args,
+      mass: 0.2,
+      allowSleep: true,
+      sleepSpeedLimit: 0.1,
+      sleepTimeLimit: 1,
+      material: {
+          friction: 1,
+          restitution: 0,
+      },
+      position: [2, 4, 0]
+    }))
+
+    return (
+        <mesh
+          ref={ref}
+          key={(data.mesh[0].name)}
+          castShadow
+          receiveShadow
+          geometry={data.mesh[0].geometry}
+          material={data.mesh[0].material}
+          position={[data.mesh[0].position.x, data.mesh[0].position.y, data.mesh[0].position.z]}
+        >
+
+        </mesh>
+    )
   }
 
   function StressTest() {
@@ -78,20 +147,22 @@ function Ground() {
   export default function CubeTest() {
     return (
       <>
-      <Canvas shadows={true} camera={{ position: [0, 20, 50] }} className='bg-black'>
-        <OrbitControls />
+      <Canvas shadows={true} camera={{ position: [0, 2, 20] }} className='bg-black'>
+        <PointerLockControls />
         <Sky sunPosition={[100, 10, 100]} />
         <ambientLight intensity={0.3} />
         <pointLight shadow-mapSize-height={1028} shadow-mapSize-width={1028} castShadow intensity={1} position={[10, 10, 0]} />
   
-        <primitive object={new THREE.AxesHelper(10)} />
         <Suspense fallback={null}>
-            <Physics allowSleep={true}>
+            <Physics gravity={[0, -9, 0]} allowSleep={true}>
                 <Ground />
                 <Debug color="black" >
                   {/* <StressTest /> */}
-                  <MeshCalculatorTest />
+                <Box />
+                <Ball />
+                <CylinderShaped />
                 </Debug>
+                <Player />
             </Physics>
         </Suspense>
         <Stats />
