@@ -34,6 +34,7 @@ Import the components with the appropriate path.
 import Cube from 'components/objects/simpleCollisionMesh/Cube'
 import Sphere from 'components/objects/simpleCollisionMesh/Sphere'
 import Cylinder from 'components/objects/simpleCollisionMesh/Cylinder'
+import Compound from 'components/objects/compoundCollisionMesh/Compound'
 ```
 
 ### Box shape
