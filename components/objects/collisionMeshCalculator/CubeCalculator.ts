@@ -41,16 +41,18 @@ export default function CubeCalculator(props) {
                     }
                 }
                 
-                // Calculate the sides
+                // Calculate the length of the sides
                 const x = boundingVectors.xMax - boundingVectors.xMin
                 const y = boundingVectors.yMax - boundingVectors.yMin
                 const z = boundingVectors.zMax - boundingVectors.zMin
 
+                // Store data in an object to return
                 const collisionData = {
                     type: 'Box',
                     args: [x, y, z],
                     position: [props.position.x, props.position.y, props.position.z],
-                    rotation: [props.rotation.x, props.rotation.y, props.rotation.z]
+                    rotation: [props.rotation.x, props.rotation.y, props.rotation.z],
+                    mesh: props
                 }
 
                 return(collisionData)

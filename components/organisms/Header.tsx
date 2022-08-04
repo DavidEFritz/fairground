@@ -10,6 +10,11 @@ export default function Header(props: HeaderProps) {
     <header className='mb-14'>
       <h1 className='w-full px-10 text-5xl font-bold text-center md:text-6xl'>
         {props.title}{' '}
+      </h1>
+      <h2 className='px-10 mt-4 text-2xl text-center md:text-2xl md:font-semibold'>
+        {props.subTitle}
+      </h2>
+      <h3 className='mt-4 text-center'>
         <a
           target='_blank'
           rel='noopener'
@@ -18,10 +23,7 @@ export default function Header(props: HeaderProps) {
         >
           {props.linkText}
         </a>
-      </h1>
-      <h2 className='px-10 mt-4 text-2xl text-center md:text-2xl md:font-semibold'>
-        {props.subTitle}
-      </h2>
+      </h3>
     </header>
   )
 }

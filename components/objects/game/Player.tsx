@@ -1,20 +1,19 @@
 // @ts-nocheck
 
-import { useSphere } from "@react-three/cannon";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useMouseInput } from "./useMouseInput";
 import { useKeyboardInput } from "./useKeyboardInput";
 import { useVariable } from "./useVariable";
 import { Bullet } from "./Bullet";
-import { Raycaster } from "three";
 
 /** Player movement constants */
-const bulletSpeed = 40;
-const bulletCoolDown = 300;
 
-export const Player = () => {
+
+export const Player = (props) => {
+  const bulletSpeed = props.velocity;
+  const bulletCoolDown = 300;
 
   /** Bullets */
   const [bullets, setBullets] = useState([]);
@@ -57,7 +56,9 @@ export const Player = () => {
           {
             id: now,
             position: [bulletPosition.x, bulletPosition.y, bulletPosition.z],
-            forward: [bulletDirection.x, bulletDirection.y, bulletDirection.z]
+            forward: [bulletDirection.x, bulletDirection.y, bulletDirection.z],
+            ballSize: props.ballSize,
+            mass: props.mass
           }
         ]);
       }
@@ -73,6 +74,8 @@ export const Player = () => {
             key={bullet.id}
             velocity={bullet.forward}
             position={bullet.position}
+            ballSize={bullet.ballSize}
+            mass={bullet.mass}
           />
         );
       })}

@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic'
+import BackHomeButton from '../../components/molecules/BackHomeButton'
 
 const ConvexPolyhedronTestScene = dynamic(
     () => import('../../components/scenes/ConvexPolyhedronTestScene'),
@@ -15,6 +16,7 @@ return (
     </h1>
     <div className='h-screen'>
         <ConvexPolyhedronTestScene />
+        <BackHomeButton />
     </div>
     </>
 )

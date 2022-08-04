@@ -9,17 +9,16 @@ export default function Cylinder(props) {
     const mesh = []
     const collisionMeshesArray = []
     const data = {
-        mesh: mesh,
         collisionMeshes: collisionMeshesArray
     }
     
 
     if (Object.keys(nodes.GLTF).length != 0) {
         object = nodes.GLTF.scene.children.map((i) => {
+            // console.log(nodes)
             if (i.geometry != null) {
                 const cube = CylinderCalculator(i)
                 collisionMeshesArray.push(cube)
-                mesh.push(i)
             }
         })
 
@@ -31,7 +30,6 @@ export default function Cylinder(props) {
             if (i.geometry != null) {
                 const cube = CylinderCalculator(i)
                 collisionMeshesArray.push(cube)
-                mesh.push(i)
             }
         })
 

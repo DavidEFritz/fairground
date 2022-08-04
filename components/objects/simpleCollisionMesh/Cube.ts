@@ -9,7 +9,6 @@ export default function Cube(props) {
     const mesh = []
     const collisionMeshesArray = []
     const data = {
-        mesh: mesh,
         collisionMeshes: collisionMeshesArray
     }
     
@@ -19,7 +18,6 @@ export default function Cube(props) {
             if (i.geometry != null) {
                 const cube = CubeCalculator(i)
                 collisionMeshesArray.push(cube)
-                mesh.push(i)
             }
         })
 

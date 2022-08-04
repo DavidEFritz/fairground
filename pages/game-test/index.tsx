@@ -1,4 +1,7 @@
 import dynamic from 'next/dynamic'
+import Crosshair from '../../components/molecules/Crosshair';
+import BackHomeButton from '../../components/molecules/BackHomeButton'
+
 
 const GameScene = dynamic(
     () => import('../../components/scenes/GameScene'),
@@ -14,7 +17,9 @@ return (
         Bowling game
     </h1>
     <div className='h-screen'>
+        <Crosshair />
         <GameScene />
+        <BackHomeButton />
     </div>
     </>
 )

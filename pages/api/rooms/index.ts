@@ -8,6 +8,4 @@ export default (req: Request, res: Response): void => {
   if (selectedRoom == apiRoomTypes.ALL) {
     res.status(200).send(roomData)
   }
-
-  // TODO More routes tbc
 }

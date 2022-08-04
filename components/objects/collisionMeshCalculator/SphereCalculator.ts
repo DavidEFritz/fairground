@@ -26,7 +26,8 @@ export default function SphereCalculator(props) {
                     type: 'Sphere',
                     args: [r],
                     position: [props.position.x, props.position.y, props.position.z],
-                    rotation: [props.rotation.x, props.rotation.y, props.rotation.z]
+                    rotation: [props.rotation.x, props.rotation.y, props.rotation.z],
+                    mesh: props
                 }
 
                 return(collisionData)

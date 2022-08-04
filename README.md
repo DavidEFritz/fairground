@@ -1,8 +1,17 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Fairground offers modules that allow you to automatically create bodies for the Cannon physics library from 3D-models. It is intended to reduce the workflow by removing the tedious trial and error of placing Cannon bodies for compound bodies and lets you import whole 3D-scenes of primitive shapes like cubes, spheres and cylinders whith their corresponding body for Cannon.
+
 
 ## Getting Started
 
-First, run the development server:
+You can install the repository by:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+And run the dev server by:
 
 ```bash
 npm run dev
@@ -10,25 +19,62 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Requirements
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+As of now, only glTF- and FBX-Files are supported.
+Any 3D-Model you want to use, needs its origin to be set to the center of mass. Otherwise the Cannon body will be offset from the 3D-Model. In Blender select the Model, right-click it, select 'Set Origin' -> 'Origin to Center of Mass (Volume)'.
+The cylinder and box shape will only work, if the 3D-Model has been oriented in a way, that all faces where at a square angle to all axes when it was created. Furthermore, if any rotation was ever applied to a 3D-Object it will not work.
+If the Cannon body is oriented in a wrong way you can fix this by opening the 3D-Model in an editing software, orient it correctly and apply the rotation. You can rotate an object in the editing software later on, but don't apply it.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Usage
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Import the components with the appropriat path.
 
-## Learn More
+```bash
+import Cube from 'components/objects/simpleCollisionMesh/Cube'
+import Sphere from 'components/objects/simpleCollisionMesh/Sphere'
+import Cylinder from 'components/objects/simpleCollisionMesh/Cylinder'
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Box shape
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+const data = Cube('url of the 3D-file')
+```
+You receive an object containing an array that holds an object for each 3D-Model that was in the provided file. The objects contain following data:
+args: These are the arguments you can pass to create a Cannon body, aka the length of the sides of the box.
+mesh: These hold all data of the 3D-Object.
+position: This is the position of said 3D-Object.
+rotation: This is the rotation of said 3D-Object.
+type: Only used for compound shapes, as it tells what type of shape it is (box, sphere, cylinder).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Sphere shape
 
-## Deploy on Vercel
+```bash
+const data = Sphere('url of the 3D-file')
+```
+You receive the same object as in box shape with the difference that the arguments consist of the radius of the sphere.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Cylinder shape
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+const data = Cylinder('url of the 3D-file')
+```
+You receive the same object as in box shape with the difference that the arguments consist of the radius at the top and bottom of the cylinder as well as the height and the amount of segments.
+
+### Compound shape
+
+The compound shape requires some pre-work. You need to remodel the 3D-Object as close as possible with simple shapes consisting of cubes, spheres and cylinders. Remember that Cannon cylinder body can create various shapes depending on how many segments it will have. E.g. you can also create a pyramid out of it, since it basically is a cylinder with a very samll top radius and 4 segments along the height. Afterwards rename the created shapes eiter as 'Physics.Cylinder', 'Physics.Cube' or 'Physics.Sphere' accordingly. Since groups don't get exported in a glTF-File this only works for an individual 3D-Object, so you can not use it to create a whole scene. If you have multiple 3D-Object in your scene that would require a compound shape you need to export them individually.
+
+```bash
+const data = Compound('url of the 3D-file')
+```
+
+You receive an object containing an object of the data of the 3D-Object and an object holding an array for the arguments you can pass to Cannon to create a compound shape.
+If the compound shapes behave strange this means, that the center of mass is not correct. This would need to be done manually since Cannon does not do it.
+Links to said issue: 
+[Link1](https://github.com/schteppe/cannon.js/issues/230#issuecomment-141810570)
+[Link2](https://github.com/schteppe/cannon.js/issues/232)
+[Link3](https://github.com/pmndrs/use-cannon/issues/29#issuecomment-602400659)
+
+I have not yet found a way to get this to work with [use-cannon](https://github.com/pmndrs/use-cannon). So if you work with use-cannon aka react/cannon these will be best used as objects with 0 mass for the moment.

@@ -14,6 +14,7 @@ import { Geometry } from "three-stdlib";
 
   function Diamond(props) {
     const diamond = useGLTF("/diamond.glb")
+    console.log(diamond)
     const geo = useMemo(() => toConvexProps(diamond.nodes.Cylinder.geometry), [diamond.nodes]);
     const [ref] = useConvexPolyhedron(() => ({ mass: 100, ...props, args: geo }));
   
@@ -53,7 +54,7 @@ function Ground() {
         <Suspense fallback={null}>
             <Physics gravity={[0, -30, 0]}>
                 <Ground />
-                <Debug color="black" scale={1.05}>
+                <Debug color="black">
                     <Diamond position={[1, 10, 0]} rotation={[0.4, 0.1, 0.1]} />
                     <Diamond position={[2, 8, 0]} rotation={[1, 0.1, 0.1]} />
                     <Diamond position={[1, 15, 0]} rotation={[1, 0.1, 0.1]} />

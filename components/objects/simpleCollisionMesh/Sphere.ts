@@ -9,7 +9,6 @@ export default function Sphere(props) {
     const mesh = []
     const collisionMeshesArray = []
     const data = {
-        mesh: mesh,
         collisionMeshes: collisionMeshesArray
     }
     
@@ -19,7 +18,6 @@ export default function Sphere(props) {
             if (i.geometry != null) {
                 const cube = SphereCalculator(i)
                 collisionMeshesArray.push(cube)
-                mesh.push(i)
             }
         })
 
@@ -31,7 +29,6 @@ export default function Sphere(props) {
             if (i.geometry != null) {
                 const cube = SphereCalculator(i)
                 collisionMeshesArray.push(cube)
-                mesh.push(i)
             }
         })
 

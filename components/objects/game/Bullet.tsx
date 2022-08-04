@@ -2,17 +2,17 @@ import { useSphere } from "@react-three/cannon";
 import React from "react";
 
 export const Bullet = (props) => {
-  /** Bullet collider */
+  /** Ball collider */
   const [sphereRef] = useSphere(() => ({
-    mass: 10,
-    args: [1],
+    mass: props.mass,
+    args: [props.ballSize],
     ...props
   }));
 
   return (
     <mesh ref={sphereRef} castShadow>
-      <sphereBufferGeometry args={[1, 32, 32]} />
-      <meshLambertMaterial color="hotpink" />
+      <sphereBufferGeometry args={[props.ballSize, 32, 32]} />
+      <meshLambertMaterial color="red" />
     </mesh>
   );
 };

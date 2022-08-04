@@ -1,5 +1,6 @@
 
 export default function CylinderCalculator(props) {
+                // console.time('test')
                 const vectorsArray = props.geometry.attributes.position.array
             
                 // Declare an object for the minimum and maximum values for x, y and z
@@ -70,16 +71,6 @@ export default function CylinderCalculator(props) {
                     vectorsTop.push(vectors)
                     }
                 }
-
-                // const vectorsBottomSorted = Array.from(
-                //     new Set(vectorsBottom.map(v => JSON.stringify(v))),
-                //     json => JSON.parse(json)
-                // )
-
-                //   const vectorsTopSorted = Array.from(
-                //     new Set(vectorsTop.map(v => JSON.stringify(v))),
-                //     json => JSON.parse(json)
-                // )
                 
                 const vectorsBottomSorted = vectorsBottom.reduce((unique, o) => {
                     if(!unique.some(obj => obj.x === o.x && obj.y === o.y && obj.z === o.z)) {
@@ -165,8 +156,9 @@ export default function CylinderCalculator(props) {
                     type: 'Cylinder',
                     args: [radiusTop, radiusBottom, h, segments],
                     position: [props.position.x, props.position.y, props.position.z],
-                    rotation: [props.rotation.x, props.rotation.y, props.rotation.z]
+                    rotation: [props.rotation.x, props.rotation.y + (Math.PI/4), props.rotation.z],
+                    mesh: props
                 }
-
+                // console.timeEnd('test')
                 return(collisionData)
 }

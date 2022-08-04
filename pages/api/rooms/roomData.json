@@ -1,17 +1,92 @@
 [
   {
-    "title": "✅ Convex Polyhedron Performance Test",
+    "title": "Convex Polyhedron Test",
     "description": "Test to measure the FPS performance of convex polyhedron.",
     "link": "/convex-polyhedron-test"
   },
   {
-    "title": "✅ Cube Test",
-    "description": "Test how Blender interacts with Three.js",
+    "title": "Simple Convex Polyhedron Test",
+    "description": "Test to measure a simple shaped convex polyhedron.",
+    "link": "/convex-polyhedron-simple-test"
+  },
+  {
+    "title": "BoundingBox Test",
+    "description": "Test how a cannon box body gets created from a bounding box",
+    "link": "/boundingBox-test"
+  },
+  {
+    "title": "BoundingSphere Test",
+    "description": "Test how a cannon sphere body gets created from a bounding sphere",
+    "link": "/boundingSphere-test"
+  },
+  {
+    "title": "BoundingCylinder Test",
+    "description": "Test how a cannon cylinder body gets created from a bounding box",
+    "link": "/boundingCylinder-test"
+  },
+  {
+    "title": "Cube Test",
+    "description": "Test how a cannon cube body gets created from analyzing vertices",
     "link": "/cube-test"
   },
   {
-    "title": "✅ Bowling",
+    "title": "Cube Stress Test",
+    "description": "Test how creating 20 cannon cubes bodies affects performance",
+    "link": "/cube-stress-test"
+  },
+  {
+    "title": "Sphere Test",
+    "description": "Test how a cannon sphere body gets created from analyzing vertices",
+    "link": "/sphere-test"
+  },
+  {
+    "title": "Sphere Stress Test",
+    "description": "Test how creating 20 cannon sphere bodies affects performance",
+    "link": "/sphere-stress-test"
+  },
+  {
+    "title": "Cylinder Test",
+    "description": "Test how a cannon cylinder body gets created from analyzing vertices",
+    "link": "/cylinder-test"
+  },
+  {
+    "title": "Cylinder Stress Test",
+    "description": "Test how creating 20 cannon cylinder bodies affects performance",
+    "link": "/cylinder-stress-test"
+  },
+  {
+    "title": "Monkey Test",
+    "description": "Test how a cannon cylinder body gets created from analyzing vertices",
+    "link": "/monkey-test"
+  },
+  {
+    "title": "Monkey Stress Test",
+    "description": "Test how creating 20 cannon cylinder bodies affects performance",
+    "link": "/monkey-stress-test"
+  },
+  {
+    "title": "Accuracy Test Scene",
+    "description": "Test whether the created cannon bodies are accurate.",
+    "link": "/accuracy-test"
+  },
+  {
+    "title": "Compound Test Scene",
+    "description": "Test how a cannon compound body is created from analyzing vertices.",
+    "link": "/compound-test"
+  },
+  {
+    "title": "Compound Stress Test Scene",
+    "description": "Test how creating 20 cannon compound bodies affects performance",
+    "link": "/compound-stress-test"
+  },
+  {
+    "title": "Bowling",
     "description": "Basic game test",
     "link": "/game-test"
+  },
+  {
+    "title": "Tin can game",
+    "description": "Basic game test",
+    "link": "/game2-test"
   }
 ]

@@ -8,7 +8,9 @@ export default function CylinderBoundingBox(props) {
     const nodes = useGLTF(props.url)
 
     // Map the GLTF Scene
+    console.time('test')
     const object = nodes.scene.children.map((i) => {
+        console.log(nodes)
         // Check if the element has a geometry
         if (i.geometry == null) {
             return null
@@ -93,7 +95,7 @@ export default function CylinderBoundingBox(props) {
             )
         }
     })
-
+    console.timeEnd('test')
     // Return all objects
     return <Suspense fallback={null}>{object}</Suspense>
   }
