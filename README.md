@@ -28,7 +28,7 @@ If the Cannon body is oriented in a wrong way you can fix this by opening the 3D
 
 ## Usage
 
-Import the components with the appropriat path.
+Import the components with the appropriate path.
 
 ```bash
 import Cube from 'components/objects/simpleCollisionMesh/Cube'
